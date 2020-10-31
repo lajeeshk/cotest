@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -18,6 +19,7 @@ class ProductController extends Controller
         $newProduct['price'] = $request->get('price');
         $newProduct['quantity'] = $request->get('quantity');
         $newProduct['total'] = $newProduct['price'] * $newProduct['quantity'];
+        $newProduct['dateSubmitted'] = Carbon::now();
 
         $products = file_get_contents(app_path('data/products.json'));
         $products = collect(json_decode($products));

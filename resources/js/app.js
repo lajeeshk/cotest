@@ -18,6 +18,8 @@ $.ajax({
 .done(function(data) {
 
     console.log(data);
+    var product = JSON.parse(data);
+    $('#product-list tr:last').after(`<tr><td>${product.name}</td><td>${product.quantity}</td><td>${product.price}</td><td>${product.total}</td><td>${product.dateSubmitted}</td></tr>`);
 
 });
 

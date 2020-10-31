@@ -37288,6 +37288,8 @@ $('#submit-product').on('click', function (event) {
     data: formData
   }).done(function (data) {
     console.log(data);
+    var product = JSON.parse(data);
+    $('#product-list tr:last').after("<tr><td>".concat(product.name, "</td><td>").concat(product.quantity, "</td><td>").concat(product.price, "</td><td>").concat(product.total, "</td><td>").concat(product.dateSubmitted, "</td></tr>"));
   });
 });
 

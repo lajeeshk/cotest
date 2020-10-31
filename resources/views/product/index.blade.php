@@ -22,19 +22,21 @@
       </form>
 </div>
 <div class="row">
-<table class="table mt-5">
+<table class="table mt-5" id="product-list">
 <thead>
     <th>Product name</th>
     <th>Quantity</th>
     <th>Price</th>
+    <th>Total</th>
+    <th>Datetime Submitted</th>
 </thead>
 @foreach ($products as $product) 
 <tr>
     <td>{{ $product->name }}</td>
     <td>{{ $product->quantity }}</td>
     <td>{{ $product->price }}</td>
-{{--     <td>{{ $product->total }}</td>
-    <td>{{ $product->createdTime }}</td> --}}
+    <td>{{ $product->total }}</td>
+    <td>{{ Carbon\Carbon::parse($product->dateSubmitted)->format('d/m/Y H:i A') }}</td>
 </tr>
 
 @endforeach
