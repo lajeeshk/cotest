@@ -29,8 +29,11 @@ class ProductController extends Controller
         file_put_contents(app_path('data/products.json'), $products->toJson());
 
         $newProduct['dateSubmitted'] = Carbon::parse($newProduct['dateSubmitted'])->format('d/m/Y H:i A');
-
-        return json_encode($newProduct);
+        $total = $products->sum('total');
+        $data['product'] = $newProduct;
+        $data['total'] = $total;
+        
+        return json_encode($data);
     }
 
     public function update(Request $request, $productId) {
@@ -50,7 +53,11 @@ class ProductController extends Controller
 
         file_put_contents(app_path('data/products.json'), $products->toJson());
 
-        return json_encode($product);
+        $total = $products->sum('total');
+        $data['product'] = $product;
+        $data['total'] = $total;
+
+        return json_encode($data);
 
     }
 }

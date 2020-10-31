@@ -1,7 +1,7 @@
 require('./bootstrap');
 
 
-$('.edit-product').on('click', function() {
+$('#product-list').on('click', '.edit-product', function() {
     var thisElemet = $(this);
     var row = thisElemet.closest('tr');
 
@@ -35,9 +35,10 @@ $('#create-product').on('submit', function(event) {
     })
     .done(function(data) {
 
-        var product = JSON.parse(data);
-        $('#product-list tr:last').after(`<tr><td>${product.name}</td><td>${product.quantity}</td><td>${product.price}</td><td>${product.total}</td><td>${product.dateSubmitted}</td><td><a href="Javascript:void(0)" class="edit-product">Edit</a></td></tr>`);
-
+        var data = JSON.parse(data);
+        var product = data.product;
+        $('#product-list tr:last').before(`<tr><td>${product.name}</td><td>${product.quantity}</td><td>${product.price}</td><td>${product.total}</td><td>${product.dateSubmitted}</td><td><a href="Javascript:void(0)" class="edit-product">Edit</a></td></tr>`);
+        $('#total').html(data.total);
     });
 });
 
@@ -61,13 +62,18 @@ $('#update-product').on('submit', function(event) {
     })
     .done(function(data) {
         $('#update-product').modal('hide');
-        var product = JSON.parse(data);
-        
-       var row = $('#product-list tr').eq(productId+1);
+
+        var data = JSON.parse(data);
+        var product = data.product;
+        var rowId = Number(productId)+1;
+        var row = $('#product-list tr').eq(rowId);
+
        row.find("td:nth-child(1)").text(product.name);
        row.find("td:nth-child(2)").text(product.quantity);
        row.find("td:nth-child(3)").text(product.price);
+       row.find("td:nth-child(4)").text(product.total);
 
+       $('#total').html(data.total);
 
     });
 });

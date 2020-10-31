@@ -44,7 +44,7 @@
 @endforeach
 <tr>
     <th>Total</th>
-<th>{{ $total }}</th>
+<th id="total">{{ $total }}</th>
     <td colspan="4"></td>
 </tr>
 </table>
