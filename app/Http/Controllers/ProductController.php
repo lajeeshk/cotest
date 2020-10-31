@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index() {
-        $products = file_get_contents(app_path('data/products.json'));
-        $products = collect(json_decode($products));
+        $products = $this->getProducts();
         $total = $products->sum('total');
         return view('product/index', ['products' =>$products, 'total' => $total]);
     }
 
     public function create(Request $request) {
+        $products = $this->getProducts();
+
         $newProduct = [];
         $newProduct['name'] = $request->get('name');
         $newProduct['price'] = $request->get('price');
@@ -22,11 +23,9 @@ class ProductController extends Controller
         $newProduct['total'] = $newProduct['price'] * $newProduct['quantity'];
         $newProduct['dateSubmitted'] = Carbon::now();
 
-        $products = file_get_contents(app_path('data/products.json'));
-        $products = collect(json_decode($products));
-
         $products->push($newProduct);
-        file_put_contents(app_path('data/products.json'), $products->toJson());
+        
+        $this->saveProducts($products);
 
         $newProduct['dateSubmitted'] = Carbon::parse($newProduct['dateSubmitted'])->format('d/m/Y H:i A');
         $total = $products->sum('total');
@@ -38,8 +37,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $productId) {
 
-        $products = file_get_contents(app_path('data/products.json'));
-        $products = collect(json_decode($products));
+        $products = $this->getProducts();
 
         $product = $products[$productId];
 
@@ -51,7 +49,7 @@ class ProductController extends Controller
 
         $products[$productId] = $product;
 
-        file_put_contents(app_path('data/products.json'), $products->toJson());
+        $this->saveProducts($products);
 
         $total = $products->sum('total');
         $data['product'] = $product;
@@ -59,5 +57,14 @@ class ProductController extends Controller
 
         return json_encode($data);
 
+    }
+
+    private function getProducts() {
+        $products = file_get_contents(app_path('data/products.json'));
+        return collect(json_decode($products));
+    }
+
+    private function saveProducts($products) {
+        file_put_contents(app_path('data/products.json'), $products->toJson());
     }
 }
