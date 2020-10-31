@@ -25,9 +25,10 @@ class ProductController extends Controller
         $products = collect(json_decode($products));
 
         $products->push($newProduct);
-
         file_put_contents(app_path('data/products.json'), $products->toJson());
 
+        $newProduct['dateSubmitted'] = Carbon::parse($newProduct['dateSubmitted'])->format('d/m/Y H:i A');
+        
         return json_encode($newProduct);
     }
 }
