@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class, 'index']);
 Route::post('/create', [ProductController::class, 'create']);
+Route::post('/update/{id}', [ProductController::class, 'update']);

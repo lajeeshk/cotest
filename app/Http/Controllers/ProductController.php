@@ -10,7 +10,8 @@ class ProductController extends Controller
     public function index() {
         $products = file_get_contents(app_path('data/products.json'));
         $products = collect(json_decode($products));
-        return view('product/index', ['products' =>$products]);
+        $total = $products->sum('total');
+        return view('product/index', ['products' =>$products, 'total' => $total]);
     }
 
     public function create(Request $request) {
@@ -28,7 +29,28 @@ class ProductController extends Controller
         file_put_contents(app_path('data/products.json'), $products->toJson());
 
         $newProduct['dateSubmitted'] = Carbon::parse($newProduct['dateSubmitted'])->format('d/m/Y H:i A');
-        
+
         return json_encode($newProduct);
+    }
+
+    public function update(Request $request, $productId) {
+
+        $products = file_get_contents(app_path('data/products.json'));
+        $products = collect(json_decode($products));
+
+        $product = $products[$productId];
+
+        $product->name = $request->get('name');
+        $product->price = $request->get('price');
+        $product->quantity = $request->get('quantity');
+
+        $product->total = $product->price * $product->quantity;
+
+        $products[$productId] = $product;
+
+        file_put_contents(app_path('data/products.json'), $products->toJson());
+
+        return json_encode($product);
+
     }
 }

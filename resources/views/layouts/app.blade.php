@@ -22,10 +22,8 @@
 <body>
     <div id="app">
         <main class="py-4">
-        <div class="container">
-            <div id="app2">
+        <div class="container">           
             @yield('content')
-            </div>
          </div>
         </main>
     </div>
